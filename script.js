@@ -1,19 +1,47 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("changeColorBtn");
-  const body = document.body;
+const accordionList = [
+  {
+    title: "Section 1",
+    content: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis sapiente
+      laborum cupiditate possimus labore, hic temporibus velit dicta earum`,
+  },
+  {
+    title: "Section 2",
+    content: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis sapiente
+    laborum cupiditate possimus labore, hic temporibus velit dicta earum`,
+  },
+  {
+    title: "Section 3",
+    content: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis sapiente
+    laborum cupiditate possimus labore, hic temporibus velit dicta earum`,
+  },
+  {
+    title: "Section 4",
+    content: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis sapiente
+    laborum cupiditate possimus labore, hic temporibus velit dicta earum`,
+  },
+  {
+    title: "Section 5",
+    content: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis sapiente
+    laborum cupiditate possimus labore, hic temporibus velit dicta earum`,
+  },
+];
 
-  const colors = [
-    "#f0f0f0", // default
-    "#ffebee", // light red
-    "#e8f5e9", // light green
-    "#e3f2fd", // light blue
-    "#fff3e0", // light orange
-  ];
+const body = document.querySelector("body");
 
-  let currentColorIndex = 0;
+const div = body.appendChild(document.createElement("div"));
+div.classList.add("accordion");
 
-  button.addEventListener("click", () => {
-    currentColorIndex = (currentColorIndex + 1) % colors.length;
-    body.style.backgroundColor = colors[currentColorIndex];
-  });
+accordionList.forEach((accordionData) => {
+  const accordion = document.createElement("details");
+
+  const title = document.createElement("summary");
+  title.appendChild(document.createTextNode(accordionData.title));
+
+  const content = document.createElement("p");
+  content.appendChild(document.createTextNode(accordionData.content));
+
+  accordion.appendChild(title);
+  accordion.appendChild(content);
+
+  div.appendChild(accordion);
 });
