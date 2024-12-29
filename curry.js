@@ -1,14 +1,33 @@
-const sum = (a, b) => {
-  return a + b;
+function curry(fn) {
+  const funcLength = fn.length;
+
+  return function curried(...args) {
+    if (args.length >= funcLength) {
+      return fn(...args);
+    }
+
+    return function (...args1) {
+      return curried(...args, ...args1);
+    };
+  };
+}
+
+const sum = (a, b, c) => {
+  return a + b + c;
 };
 
-function curry(fn) {}
+const multiply = (a, b, c) => {
+  return a * b * c;
+};
 
 const curriedSum = curry(sum);
+console.log(curriedSum(10, 2, 3)); // => 15
+console.log(curriedSum(10, 2)(3)); // => 15
+console.log(curriedSum(10)(2, 3)); // => 15
+console.log(curriedSum(10)(2)(3)); // => 15
 
-console.log("1", curriedSum(1, 2, 3)); // => 6
-console.log("2", curriedSum(1, 2, 3, 4)); // => 10
-console.log("3", curriedSum(1, 2, 3, 4, 5)); // => 10
-console.log("4", curriedSum(1)(2)(3)); // => 6
-console.log("5", curriedSum(1)(2)(3)(4)); // => 10
-console.log("6", curriedSum(1)(2)(3)(4)(5)); // => 15
+const curriedMultiply = curry(multiply);
+console.log(curriedMultiply(10, 2, 3)); // => 60
+console.log(curriedMultiply(10, 2)(3)); // => 60
+console.log(curriedMultiply(10)(2, 3)); // => 60
+console.log(curriedMultiply(10)(2)(3)); // => 60
