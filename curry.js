@@ -5,12 +5,12 @@ function curry(fn) {
     args = args.filter((val) => val != curry.placeholder);
 
     if (args.length >= funcLength) {
-      return fn(...args.slice(0, funcLength));
+      return fn.call(this, ...args.slice(0, funcLength));
     }
 
     return function (...args1) {
       args1 = args1.filter((val) => val != curry.placeholder);
-      return curried(...args, ...args1);
+      return curried.call(this, ...args, ...args1);
     };
   };
 }
