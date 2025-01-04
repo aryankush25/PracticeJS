@@ -1,15 +1,15 @@
 // Question:
 
-// First function block
-function printPerson(person = "Ada Lovelace") {
-  console.log(`${person}`);
-}
+// // First function block
+// function printPerson(person = "Ada Lovelace") {
+//   console.log(`${person}`);
+// }
 
-printPerson(Date());
+// printPerson(new Date());
 
-// Second function block
-function printDate(date: Date) {
-  console.log(`${date.toDateString()}`);
-}
+// // Second function block
+// function printDate(date: Date) {
+//   console.log(`${date.toDateString()}`);
+// }
 
-printDate(new Date());
+// printDate(Date());

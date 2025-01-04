@@ -38,7 +38,7 @@
 // }
 
 // async function adder(x) {
-//   const a = await fiveSecondWait(2);
+//   const a = fiveSecondWait(2);
 //   const b = fiveSecondWait(3);
 //   return x + (await a) + (await b);
 // }
@@ -91,3 +91,6 @@
 // console.log(obj2.item);
 
 // Question:
+
+// console.log(Date());
+// console.log(new Date());
