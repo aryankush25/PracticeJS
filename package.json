@@ -1,0 +1,25 @@
+{
+  "name": "practicejs",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aryankush25/PracticeJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aryankush25/PracticeJS/issues"
+  },
+  "homepage": "https://github.com/aryankush25/PracticeJS#readme",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
