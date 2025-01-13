@@ -1,1 +1,24 @@
 /* Using Tailwind CSS utilities */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --button-bg-color: #000000;
+  --button-text-color: #ffffff;
+}
+
+[data-theme="dark"] {
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --button-bg-color: #ffffff;
+  --button-text-color: #000000;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.dark-mode-toggle-button {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+}
