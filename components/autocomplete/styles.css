@@ -39,16 +39,19 @@ body {
   border-radius: 4px;
   overflow-y: auto;
   z-index: 1000;
-  height: 0px;
-  padding: 0;
-  border: 0;
-  transition: height 0.1s linear;
+  border: 1px solid #ccc;
+  padding: 4px;
+  max-height: 200px;
+  display: none;
+}
+
+.autocomplete-results-container.show-above {
+  top: auto;
+  bottom: calc(100% + 4px);
 }
 
 .autocomplete-results-container-visible {
-  min-height: 200px;
-  border: 1px solid #ccc;
-  padding: 4px;
+  display: block;
 }
 
 .autocomplete-result {

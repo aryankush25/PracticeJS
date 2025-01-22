@@ -91,6 +91,16 @@ const updateResultElements = (dataList) => {
 updateResultElements(data);
 
 input.addEventListener("focus", () => {
+  const inputRect = input.getBoundingClientRect();
+  const windowHeight = window.innerHeight;
+  const spaceBelow = windowHeight - inputRect.bottom;
+
+  if (spaceBelow < 250) {
+    resultsContainer.classList.add("show-above");
+  } else {
+    resultsContainer.classList.remove("show-above");
+  }
+
   resultsContainer.classList.add("autocomplete-results-container-visible");
 });
 
