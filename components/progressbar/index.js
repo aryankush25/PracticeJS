@@ -43,12 +43,6 @@ pause.onclick = () => {
   intervalId && clearInterval(intervalId) && (intervalId = null);
 };
 
-const resume = document.createElement("button");
-resume.classList.add("resume");
-resume.innerText = "Resume";
-actions.appendChild(resume);
-resume.onclick = () => startInterval();
-
 const reset = document.createElement("button");
 reset.classList.add("reset");
 reset.innerText = "Reset";
