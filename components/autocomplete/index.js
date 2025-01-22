@@ -88,6 +88,10 @@ const updateResultElements = (dataList) => {
   });
 };
 
+const showIsLoadingInResultsContainer = () => {
+  resultsContainer.innerHTML = "Loading...";
+};
+
 updateResultElements(data);
 
 input.addEventListener("focus", () => {
@@ -104,18 +108,53 @@ input.addEventListener("focus", () => {
   resultsContainer.classList.add("autocomplete-results-container-visible");
 });
 
-input.addEventListener("input", (event) => {
-  const filteredData = data.filter((item) => {
-    return item.label.toLowerCase().includes(event.target.value.toLowerCase());
-  });
-
-  updateResultElements(filteredData);
-});
-
 document.addEventListener("click", (event) => {
   if (autocompleteContainer.contains(event.target)) {
     return;
   }
 
   resultsContainer.classList.remove("autocomplete-results-container-visible");
+});
+
+const getSearchData = async (searchValue) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const filteredData = data.filter((item) => {
+    return item.label.toLowerCase().includes(searchValue.toLowerCase());
+  });
+
+  return filteredData;
+};
+
+const debounce = (func, delay) => {
+  let timeoutId;
+
+  return (...args) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
+const debouncedGetSearchData = debounce(async (value) => {
+  const filteredData = await getSearchData(value);
+
+  if (value !== input.value) {
+    return;
+  }
+
+  updateResultElements(filteredData);
+}, 1000);
+
+input.addEventListener("input", (event) => {
+  if (event.target.value === "") {
+    updateResultElements(data);
+    return;
+  }
+
+  showIsLoadingInResultsContainer();
+
+  debouncedGetSearchData(event.target.value);
 });
