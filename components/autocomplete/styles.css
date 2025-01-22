@@ -42,11 +42,14 @@ body {
   overflow-y: auto;
   z-index: 1000;
   padding: 4px;
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.1s, opacity 0.1s linear;
 }
 
 .autocomplete-results-container-visible {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 .autocomplete-result {
