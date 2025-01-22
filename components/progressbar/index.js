@@ -54,3 +54,14 @@ reset.onclick = () => {
   }
   progressbar.style.width = "0%";
 };
+
+const input = document.createElement("input");
+input.classList.add("input");
+input.type = "number";
+input.min = 0;
+input.max = 100;
+input.value = 0;
+input.addEventListener("input", (e) => {
+  progressbar.style.width = `${e.target.value}%`;
+});
+actions.appendChild(input);
