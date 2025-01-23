@@ -41,8 +41,10 @@ body {
   z-index: 1000;
   border: 1px solid #ccc;
   padding: 4px;
-  max-height: 200px;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  max-height: 0;
 }
 
 .autocomplete-results-container.show-above {
@@ -51,7 +53,9 @@ body {
 }
 
 .autocomplete-results-container-visible {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  max-height: 200px;
 }
 
 .autocomplete-result {
@@ -62,4 +66,8 @@ body {
 
 .autocomplete-result:hover {
   background-color: #f0f0f0;
+}
+
+#root {
+  height: 1200px;
 }
