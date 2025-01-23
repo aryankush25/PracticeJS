@@ -1,5 +1,9 @@
 const body = document.body;
 
+const mainContainer = document.createElement("div");
+mainContainer.className = "main-container";
+body.appendChild(mainContainer);
+
 const createButton = (text, { onClick, tooltip } = {}) => {
   const button = document.createElement("button");
   button.innerText = text;
@@ -13,7 +17,7 @@ const createButton = (text, { onClick, tooltip } = {}) => {
   if (tooltip) {
     const buttonContainer = document.createElement("div");
     buttonContainer.classList.add("button-container");
-    body.append(buttonContainer);
+    mainContainer.append(buttonContainer);
 
     const { title, placement = "top", arrow } = tooltip || {};
 
@@ -21,29 +25,76 @@ const createButton = (text, { onClick, tooltip } = {}) => {
       throw new Error("Invalid placement value");
     }
 
-    const tooltipClass = `tooltip-${placement}`;
-    const tooltipVisibleClass = `tooltip-visible`;
-
     const tooltipEl = document.createElement("div");
-    tooltipEl.classList.add("tooltip", tooltipClass);
+    tooltipEl.classList.add("tooltip", `tooltip-${placement}`);
     tooltipEl.innerText = title;
 
     buttonContainer.append(tooltipEl);
     buttonContainer.append(button);
 
     buttonContainer.addEventListener("mouseenter", () => {
-      tooltipEl.classList.add(tooltipVisibleClass);
+      tooltipEl.classList.add("tooltip-visible");
     });
     buttonContainer.addEventListener("mouseleave", () => {
-      tooltipEl.classList.remove(tooltipVisibleClass);
+      tooltipEl.classList.remove("tooltip-visible");
     });
+
+    setTimeout(() => {
+      const tooltipRect = tooltipEl.getBoundingClientRect();
+      const innerHeight = window.innerHeight;
+      const innerWidth = window.innerWidth;
+
+      let finalPlacement = null;
+
+      switch (placement) {
+        case "top": {
+          if (tooltipRect.top < 0) {
+            finalPlacement = "bottom";
+          }
+          break;
+        }
+        case "bottom": {
+          if (tooltipRect.bottom > innerHeight) {
+            finalPlacement = "bottom";
+          }
+          break;
+        }
+        case "left": {
+          if (tooltipRect.left < 0) {
+            finalPlacement = "right";
+          }
+          break;
+        }
+        case "right": {
+          if (tooltipRect.right > innerWidth) {
+            finalPlacement = "left";
+          }
+          break;
+        }
+        default: {
+          finalPlacement = placement;
+        }
+      }
+
+      tooltipEl.classList.remove(`tooltip-${placement}`);
+      const tooltipClass = `tooltip-${
+        finalPlacement ? finalPlacement : placement
+      }`;
+      tooltipEl.classList.add(tooltipClass);
+    }, 0);
   } else {
-    body.append(button);
+    mainContainer.append(button);
   }
 
   return button;
 };
 
+createButton("Button with left tooltip", {
+  tooltip: {
+    title: "Tooltip left",
+    placement: "left",
+  },
+});
 createButton("Button with top tooltip", {
   tooltip: {
     title: "Tooltip top",
@@ -54,12 +105,6 @@ createButton("Button with bottom tooltip", {
   tooltip: {
     title: "Tooltip bottom",
     placement: "bottom",
-  },
-});
-createButton("Button with left tooltip", {
-  tooltip: {
-    title: "Tooltip left",
-    placement: "left",
   },
 });
 createButton("Button with right tooltip", {
