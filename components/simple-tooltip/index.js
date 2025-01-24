@@ -4,6 +4,57 @@ const mainContainer = document.createElement("div");
 mainContainer.className = "main-container";
 body.appendChild(mainContainer);
 
+const tooltipPositions = ["top", "bottom", "left", "right"];
+
+const positionTooltip = (tooltipEl) => {
+  const placement = tooltipEl.getAttribute("placement");
+  tooltipEl.setAttribute("final-placement", placement);
+
+  setTimeout(() => {
+    const tooltipRect = tooltipEl.getBoundingClientRect();
+    const innerHeight = window.innerHeight;
+    const innerWidth = window.innerWidth;
+
+    let finalPlacement = null;
+
+    switch (placement) {
+      case "top": {
+        if (tooltipRect.top < 0) {
+          finalPlacement = "bottom";
+        }
+        break;
+      }
+      case "bottom": {
+        if (tooltipRect.bottom > innerHeight) {
+          finalPlacement = "bottom";
+        }
+        break;
+      }
+      case "left": {
+        if (tooltipRect.left < 0) {
+          finalPlacement = "right";
+        }
+        break;
+      }
+      case "right": {
+        if (tooltipRect.right > innerWidth) {
+          finalPlacement = "left";
+        }
+        break;
+      }
+      default: {
+        finalPlacement = placement;
+      }
+    }
+
+    if (!finalPlacement) {
+      finalPlacement = placement;
+    }
+
+    tooltipEl.setAttribute("final-placement", finalPlacement);
+  }, 0);
+};
+
 const createButton = (text, { onClick, tooltip } = {}) => {
   const button = document.createElement("button");
   button.innerText = text;
@@ -19,69 +70,33 @@ const createButton = (text, { onClick, tooltip } = {}) => {
     buttonContainer.classList.add("button-container");
     mainContainer.append(buttonContainer);
 
-    const { title, placement = "top", arrow } = tooltip || {};
+    const { title, placement = "top", arrow, delay } = tooltip || {};
 
-    if (!["top", "bottom", "left", "right"].includes(placement)) {
+    if (!tooltipPositions.includes(placement)) {
       throw new Error("Invalid placement value");
     }
 
     const tooltipEl = document.createElement("div");
     tooltipEl.classList.add("tooltip", `tooltip-${placement}`);
     tooltipEl.innerText = title;
+    tooltipEl.setAttribute("placement", placement);
+    tooltipEl.setAttribute("final-placement", placement);
 
     buttonContainer.append(tooltipEl);
     buttonContainer.append(button);
+    let timeout;
 
     buttonContainer.addEventListener("mouseenter", () => {
-      tooltipEl.classList.add("tooltip-visible");
+      timeout = setTimeout(() => {
+        tooltipEl.classList.add("tooltip-visible");
+      }, delay);
     });
     buttonContainer.addEventListener("mouseleave", () => {
+      clearTimeout(timeout);
       tooltipEl.classList.remove("tooltip-visible");
     });
 
-    setTimeout(() => {
-      const tooltipRect = tooltipEl.getBoundingClientRect();
-      const innerHeight = window.innerHeight;
-      const innerWidth = window.innerWidth;
-
-      let finalPlacement = null;
-
-      switch (placement) {
-        case "top": {
-          if (tooltipRect.top < 0) {
-            finalPlacement = "bottom";
-          }
-          break;
-        }
-        case "bottom": {
-          if (tooltipRect.bottom > innerHeight) {
-            finalPlacement = "bottom";
-          }
-          break;
-        }
-        case "left": {
-          if (tooltipRect.left < 0) {
-            finalPlacement = "right";
-          }
-          break;
-        }
-        case "right": {
-          if (tooltipRect.right > innerWidth) {
-            finalPlacement = "left";
-          }
-          break;
-        }
-        default: {
-          finalPlacement = placement;
-        }
-      }
-
-      tooltipEl.classList.remove(`tooltip-${placement}`);
-      const tooltipClass = `tooltip-${
-        finalPlacement ? finalPlacement : placement
-      }`;
-      tooltipEl.classList.add(tooltipClass);
-    }, 0);
+    positionTooltip(tooltipEl);
   } else {
     mainContainer.append(button);
   }
@@ -93,12 +108,14 @@ createButton("Button with left tooltip", {
   tooltip: {
     title: "Tooltip left",
     placement: "left",
+    delay: 100,
   },
 });
 createButton("Button with top tooltip", {
   tooltip: {
     title: "Tooltip top",
     placement: "top",
+    delay: 1000,
   },
 });
 createButton("Button with bottom tooltip", {
@@ -111,5 +128,32 @@ createButton("Button with right tooltip", {
   tooltip: {
     title: "Tooltip right",
     placement: "right",
+    delay: 1000,
   },
 });
+
+const handleTooltipWindowResize = () => {
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      const allTooltips = document.querySelectorAll(".tooltip");
+
+      allTooltips.forEach((tooltip) => {
+        positionTooltip(tooltip);
+      });
+    }, 1000)
+  );
+};
+
+handleTooltipWindowResize();
+
+function debounce(func, wait) {
+  let timeout;
+
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+}
